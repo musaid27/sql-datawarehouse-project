@@ -1,0 +1,22 @@
+/*
+============================
+create data base and schemas
+============================
+scrpit purpose:
+This script create a database called datawarehouse and additionally it creates schemas within the data base such as 'bronze','silver','gold' 
+*/
+
+use master;
+go
+--creating a database 
+create database DataWareHouse;
+go
+
+--creating schemas--
+use DataWareHouse;
+go
+create schema bronze;
+go
+create schema silver;
+go
+create schema gold;
