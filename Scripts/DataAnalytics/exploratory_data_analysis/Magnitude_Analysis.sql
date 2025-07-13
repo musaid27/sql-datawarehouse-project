@@ -1,3 +1,11 @@
+/*
+Comapre measure values by dimension
+such as total_sales by country or avg_price by productrs etc
+
+*/
+
+
+
 ---Magnitude Analysis--
 --Find total customers by country--
 select country ,
