@@ -1,3 +1,8 @@
+/*
+Gnerating report for key mertrics
+*/
+
+
 ---explore all objects in database---
 select * from information_schema.tables
 
