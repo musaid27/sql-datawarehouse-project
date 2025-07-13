@@ -1,0 +1,35 @@
+/*
+comapring the currenmt values to the target values 
+helps mesasure success and compare performance
+*/
+
+--Perfromance analysis--
+--Analyze the yearly performance of products by compairing their sales 
+--to both the average sales performance of the product and the previous years sales--
+WITH yearly_product_sales AS (
+select year(fs.order_date)as order_year,
+dp.product_name,
+sum(fs.sales_amount)current_sales 
+from gold.fact_sales fs
+left join gold.dim_products dp on
+fs.product_key = dp.product_key
+where order_date is not null
+group by year(fs.order_date),
+            dp.product_name
+            )
+
+select order_year,product_name,
+current_sales, 
+avg(current_sales) over(partition by product_name) as avg_currnt_sales,
+current_sales - avg(current_sales) over(partition by product_name) as diff_avg,
+case when current_sales - avg(current_sales) over(partition by product_name) > 0 then 'Above average'
+     when current_sales - avg(current_sales) over(partition by product_name) < 0 then 'below average'
+     else 'average'
+     end avg_change,
+lag(current_sales) over(partition by product_name order by order_year) py_sales,
+current_sales - lag(current_sales) over(partition by product_name order by order_year) diff_py,
+case when current_sales - lag(current_sales) over(partition by product_name order by order_year) > 0 then 'Increase'
+     when current_sales - lag(current_sales) over(partition by product_name order by order_year) < 0 THEN 'Decrease'
+     ELSE 'SAME'
+     END py_change
+from yearly_product_sales order by product_name,order_year
